@@ -35,16 +35,8 @@ regex==2021.4.4
 requests==2.25.1
 scikit-learn==0.24.2
 scipy==1.6.2
-setuptools==52.0.0.post20210125
 six==1.15.0
 snowballstemmer==2.1.0
-Sphinx==4.0.1
-sphinxcontrib-applehelp==1.0.2
-sphinxcontrib-devhelp==1.0.2
-sphinxcontrib-htmlhelp==1.0.3
-sphinxcontrib-jsmath==1.0.1
-sphinxcontrib-qthelp==1.0.3
-sphinxcontrib-serializinghtml==1.1.4
 threadpoolctl==2.1.0
 tqdm==4.59.0
 urllib3==1.26.4

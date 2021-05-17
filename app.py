@@ -14,14 +14,14 @@ import pickle
 app = Flask(__name__)
 
 #Loading pickles
-user_final_rating = pickle.load(open('user_final_rating.pkl','rb'))
-product_info = pickle.load(open('product_information.pkl','rb'))
-customer_info = pickle.load(open('premium_customers.pkl','rb'))
-trending = pickle.load(open('trending.pkl','rb'))
-product_info = pickle.load(open('product_information.pkl', "rb"))
-user_final_rating = pickle.load(open('user_final_rating.pkl','rb'))
-bow_vectorizer = pickle.load(open('bow_vectorizer.pkl', "rb"))
-dct = pickle.load(open('dct.pkl', "rb"))
+user_final_rating = pickle.load(open('models/user_final_rating.pkl','rb'))
+product_info = pickle.load(open('models/product_information.pkl','rb'))
+customer_info = pickle.load(open('models/premium_customers.pkl','rb'))
+trending = pickle.load(open('models/trending.pkl','rb'))
+product_info = pickle.load(open('models/product_information.pkl', "rb"))
+user_final_rating = pickle.load(open('models/user_final_rating.pkl','rb'))
+bow_vectorizer = pickle.load(open('models/bow_vectorizer.pkl', "rb"))
+dct = pickle.load(open('models/dct.pkl', "rb"))
 
 product_info = product_info.sort_values('id', ascending=False)
 product_info = product_info.drop_duplicates(subset='id', keep='first')
@@ -36,7 +36,15 @@ values_list = list(product_info['reviews_text'])
 review_zip_iterator = zip(keys_list, values_list)
 get_reviews = dict(review_zip_iterator)
 
+keys_list =list(product_info['id'])
+values_list = list(product_info['brand'])
+brand_zip_iterator = zip(keys_list, values_list)
+get_brands = dict(brand_zip_iterator)
+
 customers=list(customer_info['reviews_username'])
+
+#Adding Top manufacturers
+
 
 
 @app.route('/',methods =['GET','POST'])
@@ -46,22 +54,23 @@ def home():
     trending['score'] = np.round(trending['score'],2)
     response['trending'] = list(trending.to_records())
     response['user_name'] = ""
+    response['brands'] = list(product_info['brand'].value_counts()[:5].index)
     return render_template('index.html', response=response,table=customers)
 
 @app.route('/predict', methods =['POST'])
 def predict():
     
     user_name = request.form.get("table")
-    result = recommendations(user_name)
-
+    recommended_items,recommended_brands = recommendations(user_name)
     trends = {}
     trends['products'] = list(trending['name'])
     trending['score'] = np.round(trending['score'],2)
     #Records name, score, average rating positive reviews
     response = {}
-    response['recommendations'] = result
+    response['recommendations'] = recommended_items
     response['trending'] = list(trending.to_records())
     response['user_name'] = user_name
+    response['brands'] = list(recommended_brands)
 
     return render_template('index.html', response=response,table=customers)
 
@@ -92,6 +101,7 @@ def recommendations(customer):
     d = pd.DataFrame(user_final_rating.loc[customer].sort_values(ascending=False)[0:20]).reset_index()
     d['products'] = d['id'].replace(get_name)
     d['reviews'] = d['id'].replace(get_reviews)
+    d['brands'] = d['id'].replace(get_brands)
     reviews = list(d['reviews'])
     reviews_sentiment = []
     for review in reviews:
@@ -99,7 +109,8 @@ def recommendations(customer):
     d['reviews_sentiment'] = reviews_sentiment
     d = d.sort_values(by = 'reviews_sentiment',ascending = False)
     recommended_items = list(d['products'])[:5]
-    return recommended_items
+    recommended_brands = list(d['brands'])[:5]
+    return [recommended_items,recommended_brands]
 
 
 if __name__ == "__main__":

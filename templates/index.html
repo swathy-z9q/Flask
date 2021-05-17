@@ -9,8 +9,18 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Amatic+SC">
 <style>
 body,h1,h2,h3,h4,h5,h6 {font-family: "Amatic SC", sans-serif}
+
+.w3-black, .w3-hover-black:hover {
+  color: #fff!important;
+  -webkit-text-stroke-width: thin;
+  background-color: #000!important;
+}
+
+#grad1 {
+  background-color: gray; /* For browsers that do not support gradients */
+}
 </style>
-<body>
+<body  id="grad1">
 <!-- Start Content -->
 <div id="home" class="w3-content">
 
@@ -18,9 +28,9 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Amatic SC", sans-serif}
 <div id="resommendation" class="w3-container w3-black w3-xxlarge w3-padding-64">
 <h1 class="w3-center w3-jumbo w3-padding-32">Product Recommendation</h1>
 <div class="w3-row w3-center w3-border w3-border-dark-grey">
-<a href="#Login"><div class="w3-third w3-padding-large w3-red">Login</div></a>
-<a href="#Trending"><div class="w3-third w3-padding-large w3-hover-red">Trending</div></a>
-<a href="#Top"><div class="w3-third w3-padding-large w3-hover-red">Top manufacturers</div></a>
+<a href="#Login"><div class="w3-third w3-padding-large w3-red">Login  <i class="fa fa-user" aria-hidden="true"></i></div></a>
+<a href="#Trending"><div class="w3-third w3-padding-large w3-hover-red">Trending  <i class="fa fa-line-chart" aria-hidden="true"></i></div></a>
+<a href="#Top"><div class="w3-third w3-padding-large w3-hover-red">Top Brands   <i class="fa fa-star"></i></div></a>
 </div>
 
 <div id="Login" class="w3-container w3-white w3-padding-32">
@@ -51,12 +61,12 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Amatic SC", sans-serif}
   
 <hr>
     {% for product in response.recommendations %}
-<h1><b id="test" value="{{product}}" >{{product[:50]}}</b>
+<h1><b id="test" value="{{product}}" >{{product}}</b>
     {% endfor %}
 <hr>
 </div>
 
-<h1 id="Trending" class="w3-center w3-jumbo w3-padding-32">Trending</h1>
+<h1 id="Trending" class="w3-center w3-jumbo w3-padding-32">Trending   <i class="fa fa-line-chart" aria-hidden="true"></i></h1>
 <div class="w3-container w3-white w3-padding-32">
 
 <h1><b>{{response.trending[0][1]}}</b> <span class="w3-tag w3-grey w3-round">Popular</span>
@@ -71,20 +81,16 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Amatic SC", sans-serif}
 <hr>
 </div>
 
-<h1 id="Top" class="w3-center w3-jumbo w3-padding-32">Top Manufacturers</h1>
+<h1 id="Top" class="w3-center w3-jumbo w3-padding-32">Top Brands  <i class="fa fa-star"></i></h1>
 <div class="w3-container w3-white w3-padding-32">
 
-<h1><b>Today's Soup</b> <span class="w3-tag w3-grey w3-round">Seasonal</span>
-<span class="w3-right w3-tag w3-dark-grey w3-round">$5.50</span></h1>
-<p class="w3-text-grey">Ask the waiter</p>
+<h1><b>{{response.brands[0]}}</b> <span class="w3-tag w3-grey w3-round">Popular</span>
 
+{% for brand in response.brands[1:] %}
 <hr>
-<h1><b>Bruschetta</b> <span class="w3-right w3-tag w3-dark-grey w3-round">$8.50</span></h1>
-<p class="w3-text-grey">Bread with pesto, tomatoes, onion, garlic</p>
+<h1><b>{{brand}}</b></h1>
+{% endfor %}
 
-<hr>
-<h1><b>Garlic bread</b> <span class="w3-right w3-tag w3-dark-grey w3-round">$9.50</span></h1>
-<p class="w3-text-grey">Grilled ciabatta, garlic butter, onions</p>
 </div>
 </div>
 

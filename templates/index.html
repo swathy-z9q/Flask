@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<title>Recommendation</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://www.w3schools.com/lib/w3.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Amatic+SC">
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Amatic SC", sans-serif}
+</style>
+<body>
+<!-- Start Content -->
+<div id="home" class="w3-content">
+
+<!-- product_recommendation_page -->
+<div id="resommendation" class="w3-container w3-black w3-xxlarge w3-padding-64">
+<h1 class="w3-center w3-jumbo w3-padding-32">Product Recommendation</h1>
+<div class="w3-row w3-center w3-border w3-border-dark-grey">
+<a href="#Login"><div class="w3-third w3-padding-large w3-red">Login</div></a>
+<a href="#Trending"><div class="w3-third w3-padding-large w3-hover-red">Trending</div></a>
+<a href="#Top"><div class="w3-third w3-padding-large w3-hover-red">Top manufacturers</div></a>
+</div>
+
+<div id="Login" class="w3-container w3-white w3-padding-32">
+  <form action="{{ url_for('predict')}}" method="post" >
+    <div class="dropdown_container">
+      <select class="btn btn-primary btn-block btn-large" id="select_field" name="table" method="GET" action="/" style="max-width:100%;">
+        <!-- <option id="test" value="{{table[0]}}" selected>{{table[0]}}</option> -->
+
+        {% if response.user_name != "" %}
+        <option id="test" value="{{response.user_name}}" selected>{{response.user_name}}</option>
+        {% else %}
+        <option id="test" value="{{user}}" selected>{{table[0]}}</option>
+        {% endif %}
+        {% if response.username == "" %}
+        <option id="test" value="{{user}}" selected>{{user}}</option>
+        {% endif %}
+        
+        {% for user in table %}
+          <option id="test" value="{{user}}" >{{user}}</option>
+        {% endfor %}
+
+      </select>
+      <br>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block btn-large">Recommend</button>
+  </form>  
+  
+<hr>
+    {% for product in response.recommendations %}
+<h1><b id="test" value="{{product}}" >{{product[:50]}}</b>
+    {% endfor %}
+<hr>
+</div>
+
+<h1 id="Trending" class="w3-center w3-jumbo w3-padding-32">Trending</h1>
+<div class="w3-container w3-white w3-padding-32">
+
+<h1><b>{{response.trending[0][1]}}</b> <span class="w3-tag w3-grey w3-round">Popular</span>
+<span class="w3-right w3-tag w3-dark-grey w3-round"><i class="fa fa-star" aria-hidden="true"></i>{{response.trending[0][2]}}</span></h1>
+<p class="w3-text-grey">{{response.trending[0][4]}} % of customer has liked it and rated {{response.trending[0][3]}} on an average</p>
+
+{% for trending_product in response.trending %}
+<hr>
+<h1><b>{{trending_product[1]}}</b> <span class="w3-right w3-tag w3-dark-grey w3-round"><i class="fa fa-star" aria-hidden="true"></i>{{trending_product[2]}}</span></h1>
+<p class="w3-text-grey">{{trending_product[4]}} % of customer has liked it and rated {{trending_product[3]}} on an average</p>
+{% endfor %}
+<hr>
+</div>
+
+<h1 id="Top" class="w3-center w3-jumbo w3-padding-32">Top Manufacturers</h1>
+<div class="w3-container w3-white w3-padding-32">
+
+<h1><b>Today's Soup</b> <span class="w3-tag w3-grey w3-round">Seasonal</span>
+<span class="w3-right w3-tag w3-dark-grey w3-round">$5.50</span></h1>
+<p class="w3-text-grey">Ask the waiter</p>
+
+<hr>
+<h1><b>Bruschetta</b> <span class="w3-right w3-tag w3-dark-grey w3-round">$8.50</span></h1>
+<p class="w3-text-grey">Bread with pesto, tomatoes, onion, garlic</p>
+
+<hr>
+<h1><b>Garlic bread</b> <span class="w3-right w3-tag w3-dark-grey w3-round">$9.50</span></h1>
+<p class="w3-text-grey">Grilled ciabatta, garlic butter, onions</p>
+</div>
+</div>
+
+<!-- End Content -->
+</div>
+
+
+</body>
+</html>
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>ML API</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body  style=" background:url(/static/images/bg1.jpg) center / cover no-repeat;">
+  
+  <h1> Product recommendation System</h1>
+	<h2 class = "userheading">Select user for recommendation</h2>
+  
+  <div class="login">
+
+
+    <form action="{{ url_for('predict')}}"method="post" >
+    <div class="dropdown_container">
+        <select class="btn btn-primary btn-block btn-large" id="test" name="table" method="GET" action="/" style="max-width:100%;">
+        <option id="test" value="{{table[0]}}" selected>{{table[0]}}</option>
+          {% for colour in table[1:] %}
+          <option id="test" value="{{colour}}">{{colour[:50]}}</option>
+          {% endfor %}
+
+        </select>
+        <br>
+        </div>
+    	
+        <button type="submit" class="btn btn-primary btn-block btn-large">Recommend</button>
+    </form>
+
+   <br>
+   
+  <div>
+    <table style="float:centre">
+      <tr>
+        <th>Products Recommended</th>
+      </tr>
+      {% for product in testing %}
+      <tr>
+        <td id="test" value="{{product}}">{{product[:50]}}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    <br>
+  </div>
+  </div>
+
+  <div class="popular">
+    <i class="fa fa-line-chart" style="font-size:48px;color:white"></i>    
+    <form action="{{ url_for('predict')}}"method="post" >
+    <div class="dropdown_container">
+        <select class="btn btn-primary btn-block btn-large" id="test" name="table" method="GET" action="/" style="max-width:100%;">
+        <option id="test" value="{{table[0]}}" selected>{{table[0]}}</option>
+          {% for colour in table[1:] %}
+          <option id="test" value="{{colour}}">{{colour[:50]}}</option>
+          {% endfor %}
+
+        </select>
+        <br>
+        </div>
+    	
+        <button type="submit" class="btn btn-primary btn-block btn-large">Recommend</button>
+    </form>
+
+   <br>
+   
+  <div>
+    <table style="float:centre">
+      <tr>
+        <th>Products Recommended</th>
+      </tr>
+      {% for product in testing %}
+      <tr>
+        <td id="test" value="{{product}}">{{product[:50]}}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    <br>
+  </div>
+  </div>
+
+</body>
+</html> -->

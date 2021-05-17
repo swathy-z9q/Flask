@@ -2,14 +2,13 @@
 """
 @author: Swathy Sekar
 """ 
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, render_template
 import pandas as pd
 import numpy as np
 import pickle
-import re
-from nltk import PorterStemmer
+import re 
 import pickle
-ps = PorterStemmer()
+
 
 
 app = Flask(__name__)
@@ -82,7 +81,7 @@ def get_review_sentiment(text):
     cleaned_text = cleaned_text.replace("[^a-zA-Z#]", " ")
     cleaned_text = ' '.join([w for w in cleaned_text.split() if len(w)>3])
     tokenized_review = cleaned_text.split()
-    tokenized_review = [ps.stem(i) for i in tokenized_review]
+    #tokenized_review = [ps.stem(i) for i in tokenized_review]
     tokenized_review = ' '.join(tokenized_review)
     bow_text = bow_vectorizer.transform([cleaned_text])
     sentiment = dct.predict(bow_text)[0]
